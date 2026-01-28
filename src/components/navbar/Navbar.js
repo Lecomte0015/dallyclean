@@ -3,8 +3,8 @@ import { Link, NavLink } from 'react-router-dom'
 import logo from "../../assets/images/logo.png"
 import { supabase } from '../../lib/supabaseClient'
 import "./Navbar.css"
-import "./Navbar.override.css"
 import "./Navbar.mobile.css"
+import "./Navbar.override.css"
 
 const slugify = (text) =>
   text
@@ -19,6 +19,13 @@ const Navbar = () => {
   const [open, setOpen] = useState(false) // dropdown desktop
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
+
+  // Debug: log when hamburger is clicked
+  const handleHamburgerClick = () => {
+    console.log('Hamburger clicked! Current mobileOpen:', mobileOpen)
+    setMobileOpen(true)
+    console.log('Setting mobileOpen to true')
+  }
   const [services, setServices] = useState([])
   const [navPages, setNavPages] = useState([])
   const wrapperRef = useRef(null)
@@ -146,7 +153,7 @@ const Navbar = () => {
       <div className='nav-actions'>
         <Link to="/booking" className='cta btn btn-primary'>Prendre RDV</Link>
 
-        <button className='hamburger' aria-label='Ouvrir le menu' onClick={() => setMobileOpen(true)}>
+        <button className='hamburger' aria-label='Ouvrir le menu' onClick={handleHamburgerClick}>
           ☰
         </button>
       </div>
