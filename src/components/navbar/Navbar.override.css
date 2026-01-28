@@ -195,46 +195,55 @@
 /* Hamburger Menu Button */
 .hamburger {
   display: none;
-  background: transparent;
-  border: 2px solid var(--border-default);
-  border-radius: var(--radius-md);
-  padding: 8px 12px;
-  font-size: 22px;
-  cursor: pointer;
-  color: var(--text-primary);
+  background: transparent !important;
+  border: 2px solid var(--border-default) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 8px 12px !important;
+  font-size: 22px !important;
+  cursor: pointer !important;
+  color: var(--text-primary) !important;
   transition: all var(--transition-fast);
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 .hamburger:hover {
-  background: var(--bg-soft);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  background: var(--bg-soft) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+}
+
+.hamburger:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Mobile Menu Overlay */
 .mobile-menu {
-  display: none;
+  display: none !important;
 }
 
 .mobile-menu.open {
-  display: block;
-  position: fixed;
-  inset: 0;
-  background: rgba(15, 23, 42, 0.5);
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(15, 23, 42, 0.5) !important;
   backdrop-filter: blur(4px);
-  z-index: var(--z-modal-backdrop);
+  z-index: var(--z-modal-backdrop) !important;
   animation: fadeIn var(--transition-fast);
 }
 
 /* Mobile Menu Sidebar */
 .mobile-menu-inner {
-  background: var(--bg-primary);
-  width: min(85%, 380px);
-  height: 100%;
-  padding: var(--space-5);
-  overflow-y: auto;
-  box-shadow: var(--shadow-2xl);
+  background: var(--bg-primary) !important;
+  width: min(85%, 380px) !important;
+  height: 100% !important;
+  padding: var(--space-5) !important;
+  overflow-y: auto !important;
+  box-shadow: var(--shadow-2xl) !important;
   animation: slideInFromLeft var(--transition-slow) ease-out;
+  position: relative !important;
+  z-index: var(--z-modal) !important;
 }
 
 @keyframes slideInFromLeft {
