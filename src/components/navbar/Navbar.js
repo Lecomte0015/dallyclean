@@ -164,32 +164,40 @@ const Navbar = () => {
       {/* Mobile menu via Portal - renders directly in body */}
       {mobileOpen && createPortal(
         <div
-          className={`mobile-menu open`}
-          role="dialog"
-          aria-modal="true"
+          onClick={(e) => {
+            // Close if clicking on overlay (not sidebar)
+            if (e.target === e.currentTarget) {
+              setMobileOpen(false)
+            }
+          }}
           style={{
             display: 'block',
             position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            top: '0px',
+            left: '0px',
+            right: '0px',
+            bottom: '0px',
             width: '100vw',
             height: '100vh',
-            background: 'rgba(15, 23, 42, 0.5)',
-            zIndex: 99999
+            backgroundColor: 'rgba(15, 23, 42, 0.8)',
+            zIndex: 999999,
+            margin: 0,
+            padding: 0
           }}
         >
           <div
-            className='mobile-menu-inner'
             style={{
-              background: 'white',
+              position: 'absolute',
+              top: '0px',
+              left: '0px',
+              backgroundColor: '#ffffff',
               width: '85%',
               maxWidth: '380px',
               height: '100vh',
               padding: '48px',
               overflowY: 'auto',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+              margin: 0
             }}
           >
             <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>
