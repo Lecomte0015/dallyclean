@@ -1,71 +1,45 @@
 /* ============================================
-   MOBILE MENU - Force display with maximum specificity
+   MOBILE MENU - Clean styles without Bootstrap conflicts
    ============================================ */
 
-/* Force hamburger button to display on mobile */
-@media (max-width: 768px) {
-  .navbar-container .hamburger {
-    display: inline-block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-  }
-}
-
-/* Force mobile menu overlay */
-.navbar-container .mobile-menu {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-.navbar-container .mobile-menu.open {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: auto !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: rgba(15, 23, 42, 0.5) !important;
+/* Mobile menu is hidden by default */
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.5);
   backdrop-filter: blur(4px);
-  z-index: 9999 !important;
+  z-index: 9999;
 }
 
-/* Force mobile menu inner sidebar */
-.navbar-container .mobile-menu.open .mobile-menu-inner {
-  display: block !important;
-  visibility: visible !important;
-  position: relative !important;
-  background: white !important;
-  width: 85% !important;
-  max-width: 380px !important;
-  height: 100vh !important;
-  padding: 48px !important;
-  overflow-y: auto !important;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
-  z-index: 10000 !important;
+/* Show mobile menu when open */
+.mobile-menu.open {
+  display: block;
 }
 
-/* Mobile menu content */
-.navbar-container .mobile-menu.open .mobile-menu-inner ul {
-  display: block !important;
-  list-style: none !important;
-  padding: 0 !important;
-  margin: 0 !important;
+/* Mobile menu sidebar */
+.mobile-menu-inner {
+  background: white;
+  width: 85%;
+  max-width: 380px;
+  height: 100vh;
+  padding: 48px;
+  overflow-y: auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.navbar-container .mobile-menu.open .mobile-menu-inner li {
-  display: block !important;
-  margin-bottom: 24px !important;
+/* Mobile menu lists */
+.mobile-menu-inner ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.navbar-container .mobile-menu.open .mobile-menu-inner a,
-.navbar-container .mobile-menu.open .mobile-menu-inner button {
-  display: block !important;
-  visibility: visible !important;
+.mobile-menu-inner li {
+  margin-bottom: 24px;
 }
