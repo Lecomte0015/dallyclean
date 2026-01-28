@@ -4,6 +4,7 @@ import logo from "../../assets/images/logo.png"
 import { supabase } from '../../lib/supabaseClient'
 import "./Navbar.css"
 import "./Navbar.override.css"
+import "./Navbar.mobile.css"
 
 const slugify = (text) =>
   text
