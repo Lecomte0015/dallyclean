@@ -13,6 +13,7 @@ const ServiceDetail = () => {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [totalPrice, setTotalPrice] = useState(0)
+  const [sections, setSections] = useState([])
 
   useEffect(() => {
     console.log('🔄 USEEFFECT DÉCLENCHÉ - slug:', slug)
@@ -53,6 +54,38 @@ const ServiceDetail = () => {
       })
 
       setService(serviceData)
+
+      // Charger l'ordre des sections depuis la base de données
+      const { data: sectionsData, error: sectionsError } = await supabase
+        .from('service_sections')
+        .select('*')
+        .eq('service_id', serviceData.id)
+        .order('display_order', { ascending: true })
+
+      if (sectionsError) {
+        console.error('Error loading sections:', sectionsError)
+        // Si pas de sections personnalisées, utiliser l'ordre par défaut
+        setSections([
+          { section_type: 'title', is_visible: true, column_position: 'full' },
+          { section_type: 'description', is_visible: true, column_position: 'full' },
+          { section_type: 'image', is_visible: true, column_position: 'left' },
+          { section_type: 'options', is_visible: true, column_position: 'right' },
+          { section_type: 'price', is_visible: true, column_position: 'right' },
+          { section_type: 'actions', is_visible: true, column_position: 'right' }
+        ])
+      } else if (sectionsData && sectionsData.length > 0) {
+        setSections(sectionsData)
+      } else {
+        // Ordre par défaut si aucune section n'existe
+        setSections([
+          { section_type: 'title', is_visible: true, column_position: 'full' },
+          { section_type: 'description', is_visible: true, column_position: 'full' },
+          { section_type: 'image', is_visible: true, column_position: 'left' },
+          { section_type: 'options', is_visible: true, column_position: 'right' },
+          { section_type: 'price', is_visible: true, column_position: 'right' },
+          { section_type: 'actions', is_visible: true, column_position: 'right' }
+        ])
+      }
 
       // Charger les options et leurs choix si le service a des options
       if (serviceData.has_options) {
@@ -167,6 +200,198 @@ const ServiceDetail = () => {
     })
   }
 
+  const renderSection = (sectionType) => {
+    switch (sectionType) {
+      case 'title':
+        return (
+          <div className="service-detail-section" key="title">
+            <h1>{service.page_title || service.name || 'Configurez votre service'}</h1>
+          </div>
+        )
+
+      case 'description':
+        return service.description ? (
+          <div className="service-detail-section" key="description">
+            <p className="service-description">{service.description}</p>
+          </div>
+        ) : null
+
+      case 'image':
+        return service.image_url ? (
+          <div className="service-detail-image" key="image">
+            <img src={service.image_url} alt={service.name} />
+          </div>
+        ) : null
+
+      case 'options':
+        return options.length > 0 ? (
+          <div className="service-detail-section" key="options">
+            {options.map((option) => (
+              <div key={option.id} className="service-option">
+                <div className="option-header">
+                  <label className="option-label">
+                    {option.name}
+                    {option.is_required && <span className="required-badge">Requis</span>}
+                  </label>
+                </div>
+
+                {option.choices && option.choices.length === 0 && (
+                  <div style={{
+                    padding: '12px',
+                    background: 'rgba(239, 68, 68, 0.1)',
+                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                    borderRadius: '8px',
+                    color: '#ef4444',
+                    fontSize: '14px',
+                    marginBottom: '12px'
+                  }}>
+                    ⚠️ Aucun choix disponible pour cette option. Veuillez créer des choix dans le back-office.
+                  </div>
+                )}
+
+                <div className="option-choices">
+                  {option.type === 'select' ? (
+                    <select
+                      value={selectedOptions[option.id] || ''}
+                      onChange={(e) => handleOptionChange(option.id, parseInt(e.target.value))}
+                      className="option-select"
+                      required={option.is_required}
+                    >
+                      {!option.is_required && <option value="">-- Aucun --</option>}
+                      {option.choices.map((choice) => (
+                        <option key={choice.id} value={choice.id}>
+                          {choice.label}
+                          {choice.price_modifier !== 0 && ` (${choice.price_modifier > 0 ? '+' : ''}${choice.price_modifier}€)`}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="option-radio-group">
+                      {option.choices.map((choice) => {
+                        const isSelected = selectedOptions[option.id] === choice.id
+                        return (
+                          <label
+                            key={choice.id}
+                            className={`option-radio-item ${isSelected ? 'selected' : ''}`}
+                            style={{
+                              borderColor: isSelected ? '#3b82f6' : '#e5e7eb',
+                              background: isSelected ? 'rgba(59, 130, 246, 0.1)' : '#fff',
+                              transition: 'all 0.2s ease',
+                              cursor: 'pointer'
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.borderColor = '#3b82f6'
+                              e.currentTarget.style.background = isSelected ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.05)'
+                              e.currentTarget.style.transform = 'translateY(-1px)'
+                              e.currentTarget.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.15)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.borderColor = isSelected ? '#3b82f6' : '#e5e7eb'
+                              e.currentTarget.style.background = isSelected ? 'rgba(59, 130, 246, 0.1)' : '#fff'
+                              e.currentTarget.style.transform = ''
+                              e.currentTarget.style.boxShadow = isSelected ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : ''
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name={`option-${option.id}`}
+                              value={choice.id}
+                              checked={isSelected}
+                              onChange={() => handleOptionChange(option.id, choice.id)}
+                              required={option.is_required}
+                              style={{ accentColor: '#3b82f6' }}
+                            />
+                            <div className="radio-content">
+                              <span className="radio-label">{choice.label}</span>
+                              {choice.price_modifier !== 0 && (
+                                <span className="radio-price" style={{ color: '#3b82f6' }}>
+                                  {choice.price_modifier > 0 ? '+' : ''}{choice.price_modifier}€
+                                </span>
+                              )}
+                              {isSelected && (
+                                <Check size={18} className="radio-check" />
+                              )}
+                            </div>
+                          </label>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : null
+
+      case 'price':
+        return (
+          <div className="service-detail-section" key="price">
+            <div className="service-price-summary">
+              <div className="price-breakdown">
+                {service.has_options && options.length > 0 ? (
+                  <>
+                    <div className="price-line">
+                      <span>Prix de base</span>
+                      <span>{service.base_price?.toFixed(2) || '0.00'}€</span>
+                    </div>
+                    {Object.entries(selectedOptions).map(([optionId, choiceId]) => {
+                      const option = options.find(o => o.id === parseInt(optionId))
+                      const choice = option?.choices.find(c => c.id === choiceId)
+                      if (choice && choice.price_modifier !== 0) {
+                        return (
+                          <div key={optionId} className="price-line modifier">
+                            <span>{option.name}: {choice.label}</span>
+                            <span>{choice.price_modifier > 0 ? '+' : ''}{choice.price_modifier.toFixed(2)}€</span>
+                          </div>
+                        )
+                      }
+                      return null
+                    })}
+                    <div className="price-line total">
+                      <span>Total</span>
+                      <span className="total-amount">{totalPrice.toFixed(2)}€</span>
+                    </div>
+                  </>
+                ) : service.price ? (
+                  <div className="price-line total">
+                    <span>Tarif</span>
+                    <span className="total-amount">{service.price}</span>
+                  </div>
+                ) : (
+                  <p className="text-secondary">Tarif sur devis</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )
+
+      case 'actions':
+        return (
+          <div className="service-detail-actions" key="actions">
+            {!canBook() && (
+              <div className="booking-warning">
+                <AlertCircle size={18} />
+                <span>Veuillez sélectionner toutes les options requises</span>
+              </div>
+            )}
+            <button
+              onClick={handleBooking}
+              disabled={!canBook()}
+              className="btn btn-primary btn-lg"
+            >
+              Réserver ce service
+            </button>
+            <Link to="/contact" className="btn btn-outline btn-lg">
+              Demander un devis
+            </Link>
+          </div>
+        )
+
+      default:
+        return null
+    }
+  }
+
   if (loading) {
     return (
       <div className="service-detail-container">
@@ -205,183 +430,35 @@ const ServiceDetail = () => {
           </div>
 
           <div className="service-detail-grid">
-            {service.image_url && (
-              <div className="service-detail-image">
-                <img src={service.image_url} alt={service.name} />
-              </div>
-            )}
+            {(() => {
+              const visibleSections = sections.filter(section => section.is_visible)
+              const leftSections = visibleSections.filter(s => s.column_position === 'left')
+              const rightSections = visibleSections.filter(s => s.column_position === 'right')
+              const fullSections = visibleSections.filter(s => !s.column_position || s.column_position === 'full')
 
-            <div className="service-detail-info">
-              {/* Description */}
-              <div className="service-detail-section">
-                <h1>{service.page_title || 'Configurez votre service'}</h1>
-                {service.description && (
-                  <p className="service-description">{service.description}</p>
-                )}
-              </div>
-
-              {/* Options configurables */}
-              {options.length > 0 && (
-                <div className="service-detail-section">
-                  
-
-                  {options.map((option) => (
-                    <div key={option.id} className="service-option">
-                      <div className="option-header">
-                        <label className="option-label">
-                          {option.name}
-                          {option.is_required && <span className="required-badge">Requis</span>}
-                        </label>
-                      </div>
-
-                      {option.choices && option.choices.length === 0 && (
-                        <div style={{
-                          padding: '12px',
-                          background: 'rgba(239, 68, 68, 0.1)',
-                          border: '1px solid rgba(239, 68, 68, 0.3)',
-                          borderRadius: '8px',
-                          color: '#ef4444',
-                          fontSize: '14px',
-                          marginBottom: '12px'
-                        }}>
-                          ⚠️ Aucun choix disponible pour cette option. Veuillez créer des choix dans le back-office.
-                        </div>
-                      )}
-
-                      <div className="option-choices">
-                        {option.type === 'select' ? (
-                          <select
-                            value={selectedOptions[option.id] || ''}
-                            onChange={(e) => handleOptionChange(option.id, parseInt(e.target.value))}
-                            className="option-select"
-                            required={option.is_required}
-                          >
-                            {!option.is_required && <option value="">-- Aucun --</option>}
-                            {option.choices.map((choice) => (
-                              <option key={choice.id} value={choice.id}>
-                                {choice.label}
-                                {choice.price_modifier !== 0 && ` (${choice.price_modifier > 0 ? '+' : ''}${choice.price_modifier}€)`}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <div className="option-radio-group">
-                            {option.choices.map((choice) => {
-                              const isSelected = selectedOptions[option.id] === choice.id
-                              return (
-                                <label
-                                  key={choice.id}
-                                  className={`option-radio-item ${isSelected ? 'selected' : ''}`}
-                                  style={{
-                                    borderColor: isSelected ? '#3b82f6' : '#e5e7eb',
-                                    background: isSelected ? 'rgba(59, 130, 246, 0.1)' : '#fff',
-                                    transition: 'all 0.2s ease',
-                                    cursor: 'pointer'
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.borderColor = '#3b82f6'
-                                    e.currentTarget.style.background = isSelected ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.05)'
-                                    e.currentTarget.style.transform = 'translateY(-1px)'
-                                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(59, 130, 246, 0.15)'
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.borderColor = isSelected ? '#3b82f6' : '#e5e7eb'
-                                    e.currentTarget.style.background = isSelected ? 'rgba(59, 130, 246, 0.1)' : '#fff'
-                                    e.currentTarget.style.transform = ''
-                                    e.currentTarget.style.boxShadow = isSelected ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : ''
-                                  }}
-                                >
-                                  <input
-                                    type="radio"
-                                    name={`option-${option.id}`}
-                                    value={choice.id}
-                                    checked={isSelected}
-                                    onChange={() => handleOptionChange(option.id, choice.id)}
-                                    required={option.is_required}
-                                    style={{ accentColor: '#3b82f6' }}
-                                  />
-                                  <div className="radio-content">
-                                    <span className="radio-label">{choice.label}</span>
-                                    {choice.price_modifier !== 0 && (
-                                      <span className="radio-price" style={{ color: '#3b82f6' }}>
-                                        {choice.price_modifier > 0 ? '+' : ''}{choice.price_modifier}€
-                                      </span>
-                                    )}
-                                    {isSelected && (
-                                      <Check size={18} className="radio-check" />
-                                    )}
-                                  </div>
-                                </label>
-                              )
-                            })}
-                          </div>
-                        )}
-                      </div>
+              return (
+                <>
+                  {/* Full width sections - rendered in order */}
+                  {fullSections.map(section => (
+                    <div key={section.section_type} className="service-detail-full">
+                      {renderSection(section.section_type)}
                     </div>
                   ))}
-                </div>
-              )}
 
-              {/* Prix */}
-              <div className="service-detail-section">
-                <div className="service-price-summary">
-                  <div className="price-breakdown">
-                    {service.has_options && options.length > 0 ? (
-                      <>
-                        <div className="price-line">
-                          <span>Prix de base</span>
-                          <span>{service.base_price?.toFixed(2) || '0.00'}€</span>
-                        </div>
-                        {Object.entries(selectedOptions).map(([optionId, choiceId]) => {
-                          const option = options.find(o => o.id === parseInt(optionId))
-                          const choice = option?.choices.find(c => c.id === choiceId)
-                          if (choice && choice.price_modifier !== 0) {
-                            return (
-                              <div key={optionId} className="price-line modifier">
-                                <span>{option.name}: {choice.label}</span>
-                                <span>{choice.price_modifier > 0 ? '+' : ''}{choice.price_modifier.toFixed(2)}€</span>
-                              </div>
-                            )
-                          }
-                          return null
-                        })}
-                        <div className="price-line total">
-                          <span>Total</span>
-                          <span className="total-amount">{totalPrice.toFixed(2)}€</span>
-                        </div>
-                      </>
-                    ) : service.price ? (
-                      <div className="price-line total">
-                        <span>Tarif</span>
-                        <span className="total-amount">{service.price}</span>
+                  {/* Two column layout if there are left or right sections */}
+                  {(leftSections.length > 0 || rightSections.length > 0) && (
+                    <div className="service-detail-columns">
+                      <div className="service-detail-left">
+                        {leftSections.map(section => renderSection(section.section_type))}
                       </div>
-                    ) : (
-                      <p className="text-secondary">Tarif sur devis</p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Actions */}
-              <div className="service-detail-actions">
-                {!canBook() && (
-                  <div className="booking-warning">
-                    <AlertCircle size={18} />
-                    <span>Veuillez sélectionner toutes les options requises</span>
-                  </div>
-                )}
-                <button
-                  onClick={handleBooking}
-                  disabled={!canBook()}
-                  className="btn btn-primary btn-lg"
-                >
-                  Réserver ce service
-                </button>
-                <Link to="/contact" className="btn btn-outline btn-lg">
-                  Demander un devis
-                </Link>
-              </div>
-            </div>
+                      <div className="service-detail-right">
+                        {rightSections.map(section => renderSection(section.section_type))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )
+            })()}
           </div>
         </div>
       </div>

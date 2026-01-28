@@ -40,13 +40,30 @@
 }
 
 .service-detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--space-8);
   background: var(--bg-secondary);
   padding: var(--space-8);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
+}
+
+.service-detail-full {
+  width: 100%;
+}
+
+.service-detail-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+}
+
+.service-detail-left,
+.service-detail-right {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
 .service-detail-image {
@@ -337,9 +354,12 @@
   }
 
   .service-detail-grid {
-    grid-template-columns: 1fr;
     gap: var(--space-6);
     padding: var(--space-6);
+  }
+
+  .service-detail-columns {
+    grid-template-columns: 1fr;
   }
 
   .service-detail-image img {

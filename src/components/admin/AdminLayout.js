@@ -12,7 +12,8 @@ import {
   Image,
   LogOut,
   Menu,
-  X
+  X,
+  Settings
 } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import './AdminLayout.css'
@@ -22,6 +23,7 @@ const menuItems = [
   { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
   { path: '/admin/bookings', icon: Calendar, label: 'Réservations' },
   { path: '/admin/services', icon: Briefcase, label: 'Services' },
+  { path: '/admin/service-layout', icon: Settings, label: 'Configuration Pages' },
   { path: '/admin/testimonials', icon: MessageSquare, label: 'Témoignages' },
   { path: '/admin/plans', icon: CreditCard, label: 'Forfaits' },
   { path: '/admin/faqs', icon: HelpCircle, label: 'FAQs' },

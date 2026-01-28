@@ -33,6 +33,7 @@ import ZonesPage from './pages/admin/ZonesPage'
 import PagesPage from './pages/admin/PagesPage'
 import MediaPage from './pages/admin/MediaPage'
 import DebugOptions from './pages/admin/DebugOptions'
+import ServiceLayoutPage from './pages/admin/ServiceLayoutPage'
 
 const App = () => {
   return (
@@ -58,6 +59,11 @@ const App = () => {
         <Route path="/admin/services/:serviceId/options" element={
           <ProtectedRoute>
             <ServiceOptionsPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/service-layout" element={
+          <ProtectedRoute>
+            <ServiceLayoutPage />
           </ProtectedRoute>
         } />
         <Route path="/admin/testimonials" element={

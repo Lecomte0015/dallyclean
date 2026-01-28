@@ -134,12 +134,170 @@
   font-size: var(--text-sm);
 }
 
-@media (max-width: 480px) {
+/* Responsive */
+
+/* Tablettes (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .login-container {
+    max-width: 420px;
+  }
+
   .login-card {
-    padding: var(--space-5);
+    padding: var(--space-6);
   }
 
   .login-header h1 {
     font-size: var(--text-2xl);
+  }
+}
+
+/* Mobiles (max 768px) */
+@media (max-width: 768px) {
+  .login-page::before {
+    width: 600px;
+    height: 600px;
+    top: -40%;
+    right: -30%;
+  }
+
+  .login-container {
+    max-width: 400px;
+  }
+
+  .login-card {
+    padding: var(--space-6);
+  }
+
+  .login-header img {
+    height: 44px;
+    margin-bottom: var(--space-3);
+  }
+
+  .login-header h1 {
+    font-size: var(--text-2xl);
+  }
+
+  .login-header p {
+    font-size: var(--text-sm);
+  }
+}
+
+/* Petits mobiles (max 640px) */
+@media (max-width: 640px) {
+  .login-page {
+    padding: var(--space-3);
+  }
+
+  .login-page::before {
+    width: 500px;
+    height: 500px;
+    top: -30%;
+    right: -40%;
+  }
+
+  .login-container {
+    max-width: 100%;
+  }
+
+  .login-card {
+    padding: var(--space-5);
+  }
+
+  .login-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .login-header img {
+    height: 40px;
+  }
+
+  .login-header h1 {
+    font-size: var(--text-xl);
+  }
+
+  .login-form input {
+    padding: 12px 14px;
+    font-size: var(--text-sm);
+  }
+
+  .login-form .form-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .alert {
+    padding: var(--space-2) var(--space-3);
+    font-size: 13px;
+  }
+}
+
+/* Très petits mobiles (max 480px) */
+@media (max-width: 480px) {
+  .login-page {
+    padding: var(--space-2);
+  }
+
+  .login-page::before {
+    width: 400px;
+    height: 400px;
+    top: -20%;
+    right: -50%;
+  }
+
+  .login-card {
+    padding: var(--space-4);
+  }
+
+  .login-header {
+    margin-bottom: var(--space-4);
+  }
+
+  .login-header img {
+    height: 36px;
+    margin-bottom: var(--space-3);
+  }
+
+  .login-header h1 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-1);
+  }
+
+  .login-header p {
+    font-size: 13px;
+  }
+
+  .login-form {
+    margin-bottom: var(--space-4);
+  }
+
+  .login-form .form-group {
+    margin-bottom: var(--space-3);
+  }
+
+  .login-form .form-group:last-of-type {
+    margin-bottom: var(--space-4);
+  }
+
+  .login-form label {
+    font-size: 13px;
+    margin-bottom: var(--space-1);
+  }
+
+  .login-form input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .alert {
+    padding: var(--space-2);
+    font-size: 12px;
+    margin-bottom: var(--space-3);
+  }
+
+  .login-footer {
+    padding-top: var(--space-3);
+  }
+
+  .login-footer p {
+    font-size: 12px;
   }
 }
