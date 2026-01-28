@@ -215,6 +215,9 @@ const ServiceDetail = () => {
               {/* Description */}
               <div className="service-detail-section">
                 <h1>{service.page_title || 'Configurez votre service'}</h1>
+                {service.description && (
+                  <p className="service-description">{service.description}</p>
+                )}
               </div>
 
               {/* Options configurables */}
