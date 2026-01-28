@@ -159,8 +159,35 @@ const Navbar = () => {
       </div>
 
       {/* Mobile full screen menu */}
-      <div className={`mobile-menu ${mobileOpen ? 'open' : ''}`} role="dialog" aria-modal={mobileOpen}>
-        <div className='mobile-menu-inner'>
+      <div
+        className={`mobile-menu ${mobileOpen ? 'open' : ''}`}
+        role="dialog"
+        aria-modal={mobileOpen}
+        style={{
+          display: mobileOpen ? 'block' : 'none',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: '100vw',
+          height: '100vh',
+          background: 'rgba(15, 23, 42, 0.5)',
+          zIndex: 9999
+        }}
+      >
+        <div
+          className='mobile-menu-inner'
+          style={{
+            background: 'white',
+            width: '85%',
+            maxWidth: '380px',
+            height: '100vh',
+            padding: '48px',
+            overflowY: 'auto',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          }}
+        >
           <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>
           <ul>
             <li><Link to="/" onClick={() => setMobileOpen(false)}>Accueil</Link></li>
