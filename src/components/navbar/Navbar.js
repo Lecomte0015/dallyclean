@@ -108,57 +108,59 @@ const Navbar = () => {
   }
 
   return (
-    <header className='navbar-container' ref={wrapperRef}>
-      <div className='nav-left'>
-        <Link to="/" className="logo-link"><img src={logo} alt='Dally Nettoyage' /></Link>
-      </div>
+    <>
+      <header className='navbar-container' ref={wrapperRef}>
+        <div className='nav-left'>
+          <Link to="/" className="logo-link"><img src={logo} alt='Dally Nettoyage' /></Link>
+        </div>
 
-      <nav className='nav-center' aria-label="Navigation principale">
-        <ul className='nav-list'>
-          <li><NavLink to="/" end>Accueil</NavLink></li>
+        <nav className='nav-center' aria-label="Navigation principale">
+          <ul className='nav-list'>
+            <li><NavLink to="/" end>Accueil</NavLink></li>
 
-          <li className='nav-item-dropdown' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button
-              className='dropdown-toggle'
-              onClick={() => setOpen(o => !o)}
-              aria-expanded={open}
-              aria-haspopup="menu"
-            >Services ▾</button>
+            <li className='nav-item-dropdown' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+              <button
+                className='dropdown-toggle'
+                onClick={() => setOpen(o => !o)}
+                aria-expanded={open}
+                aria-haspopup="menu"
+              >Services ▾</button>
 
-            <ul className={`dropdown-menu ${open ? 'open' : ''}`} role="menu">
-              {services.map(s => (
-                <li key={s.name}>
-                  <Link
-                    to={`/services/${s.slug || slugify(s.name)}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    {s.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </li>
-
-          <li><NavLink to="/tarifs">Tarifs</NavLink></li>
-          <li><NavLink to="/a-propos">À propos</NavLink></li>
-          <li><NavLink to="/testimonials">Témoignages</NavLink></li>
-          {navPages.map(page => (
-            <li key={page.slug}>
-              <NavLink to={`/pages/${page.slug}`}>{page.title}</NavLink>
+              <ul className={`dropdown-menu ${open ? 'open' : ''}`} role="menu">
+                {services.map(s => (
+                  <li key={s.name}>
+                    <Link
+                      to={`/services/${s.slug || slugify(s.name)}`}
+                      onClick={() => setOpen(false)}
+                    >
+                      {s.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </li>
-          ))}
-        </ul>
-      </nav>
 
-      <div className='nav-actions'>
-        <Link to="/booking" className='cta btn btn-primary'>Prendre RDV</Link>
+            <li><NavLink to="/tarifs">Tarifs</NavLink></li>
+            <li><NavLink to="/a-propos">À propos</NavLink></li>
+            <li><NavLink to="/testimonials">Témoignages</NavLink></li>
+            {navPages.map(page => (
+              <li key={page.slug}>
+                <NavLink to={`/pages/${page.slug}`}>{page.title}</NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
 
-        <button className='hamburger' aria-label='Ouvrir le menu' onClick={handleHamburgerClick}>
-          ☰
-        </button>
-      </div>
+        <div className='nav-actions'>
+          <Link to="/booking" className='cta btn btn-primary'>Prendre RDV</Link>
 
-      {/* Mobile full screen menu */}
+          <button className='hamburger' aria-label='Ouvrir le menu' onClick={handleHamburgerClick}>
+            ☰
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile full screen menu - OUTSIDE header */}
       <div
         className={`mobile-menu ${mobileOpen ? 'open' : ''}`}
         role="dialog"
@@ -213,8 +215,7 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-
-    </header>
+    </>
   )
 }
 
