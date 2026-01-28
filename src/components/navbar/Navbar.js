@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
+import { createPortal } from 'react-dom'
 import { Link, NavLink } from 'react-router-dom'
 import logo from "../../assets/images/logo.png"
 import { supabase } from '../../lib/supabaseClient'
@@ -160,61 +161,64 @@ const Navbar = () => {
         </div>
       </header>
 
-      {/* Mobile full screen menu - OUTSIDE header */}
-      <div
-        className={`mobile-menu ${mobileOpen ? 'open' : ''}`}
-        role="dialog"
-        aria-modal={mobileOpen}
-        style={{
-          display: mobileOpen ? 'block' : 'none',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(15, 23, 42, 0.5)',
-          zIndex: 9999
-        }}
-      >
+      {/* Mobile menu via Portal - renders directly in body */}
+      {mobileOpen && createPortal(
         <div
-          className='mobile-menu-inner'
+          className={`mobile-menu open`}
+          role="dialog"
+          aria-modal="true"
           style={{
-            background: 'white',
-            width: '85%',
-            maxWidth: '380px',
+            display: 'block',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
             height: '100vh',
-            padding: '48px',
-            overflowY: 'auto',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            background: 'rgba(15, 23, 42, 0.5)',
+            zIndex: 99999
           }}
         >
-          <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>
-          <ul>
-            <li><Link to="/" onClick={() => setMobileOpen(false)}>Accueil</Link></li>
-            <li>
-              <button className='mobile-accordion' onClick={() => setMobileServicesOpen(s => !s)} aria-expanded={mobileServicesOpen}>Nos services ▾</button>
-              <ul className={`mobile-submenu ${mobileServicesOpen ? 'open' : ''}`}>
-                {services.map(s => (
-                  <li key={s.name}><Link to={`/services/${s.slug || slugify(s.name)}`} onClick={() => setMobileOpen(false)}>{s.name}</Link></li>
-                ))}
-              </ul>
-            </li>
-            <li><Link to="/tarifs" onClick={() => setMobileOpen(false)}>Tarifs</Link></li>
-            <li><Link to="/a-propos" onClick={() => setMobileOpen(false)}>À propos</Link></li>
-            <li><Link to="/testimonials" onClick={() => setMobileOpen(false)}>Témoignages</Link></li>
-            {navPages.map(page => (
-              <li key={page.slug}>
-                <Link to={`/pages/${page.slug}`} onClick={() => setMobileOpen(false)}>
-                  {page.title}
-                </Link>
+          <div
+            className='mobile-menu-inner'
+            style={{
+              background: 'white',
+              width: '85%',
+              maxWidth: '380px',
+              height: '100vh',
+              padding: '48px',
+              overflowY: 'auto',
+              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+            }}
+          >
+            <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>
+            <ul>
+              <li><Link to="/" onClick={() => setMobileOpen(false)}>Accueil</Link></li>
+              <li>
+                <button className='mobile-accordion' onClick={() => setMobileServicesOpen(s => !s)} aria-expanded={mobileServicesOpen}>Nos services ▾</button>
+                <ul className={`mobile-submenu ${mobileServicesOpen ? 'open' : ''}`}>
+                  {services.map(s => (
+                    <li key={s.name}><Link to={`/services/${s.slug || slugify(s.name)}`} onClick={() => setMobileOpen(false)}>{s.name}</Link></li>
+                  ))}
+                </ul>
               </li>
-            ))}
-            <li><Link to="/booking" className='mobile-cta btn btn-primary' onClick={() => setMobileOpen(false)}>Prendre RDV</Link></li>
-          </ul>
-        </div>
-      </div>
+              <li><Link to="/tarifs" onClick={() => setMobileOpen(false)}>Tarifs</Link></li>
+              <li><Link to="/a-propos" onClick={() => setMobileOpen(false)}>À propos</Link></li>
+              <li><Link to="/testimonials" onClick={() => setMobileOpen(false)}>Témoignages</Link></li>
+              {navPages.map(page => (
+                <li key={page.slug}>
+                  <Link to={`/pages/${page.slug}`} onClick={() => setMobileOpen(false)}>
+                    {page.title}
+                  </Link>
+                </li>
+              ))}
+              <li><Link to="/booking" className='mobile-cta btn btn-primary' onClick={() => setMobileOpen(false)}>Prendre RDV</Link></li>
+            </ul>
+          </div>
+        </div>,
+        document.body
+      )}
     </>
   )
 }
