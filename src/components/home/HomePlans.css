@@ -1,0 +1,182 @@
+/* ============================================
+   HOME PLANS - Pricing Cards
+   ============================================ */
+
+.home-plans {
+  padding: var(--space-8) 0;
+  background: var(--bg-secondary);
+}
+
+.plans-header {
+  text-align: center;
+  margin-bottom: var(--space-7);
+}
+
+.plans-header h2 {
+  margin-bottom: var(--space-2);
+}
+
+.plans-header p {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-5);
+}
+
+.plan-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
+  transition: all var(--transition-base);
+}
+
+.plan-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+/* Featured Plan */
+.plan-card.featured {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.05);
+}
+
+.plan-card.featured:hover {
+  transform: scale(1.05) translateY(-8px);
+}
+
+.featured-badge {
+  position: absolute;
+  top: -12px;
+  right: var(--space-4);
+  background: var(--color-primary);
+  color: white;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Plan Header */
+.plan-header {
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-4);
+  border-bottom: 2px solid var(--border-light);
+}
+
+.plan-card h3 {
+  margin: 0 0 var(--space-3) 0;
+  font-size: var(--text-2xl);
+  color: var(--text-primary);
+}
+
+.price {
+  font-size: var(--text-4xl);
+  font-weight: var(--font-bold);
+  color: var(--color-primary);
+  margin: 0;
+}
+
+/* Points List */
+.points {
+  list-style: none;
+  margin: 0 0 var(--space-5) 0;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.points li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+.check-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border-radius: 50%;
+  font-size: var(--text-sm);
+  font-weight: var(--font-bold);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.plan-cta {
+  width: 100%;
+  justify-content: center;
+}
+
+.actions .btn-ghost {
+  width: 100%;
+  justify-content: center;
+}
+
+/* CTA Button */
+.plans-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-8);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .plan-card.featured {
+    transform: scale(1);
+  }
+
+  .plan-card.featured:hover {
+    transform: translateY(-8px);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-plans {
+    padding: var(--space-7) 0;
+  }
+
+  .plans-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .plan-card {
+    padding: var(--space-5);
+  }
+
+  .price {
+    font-size: var(--text-3xl);
+  }
+}

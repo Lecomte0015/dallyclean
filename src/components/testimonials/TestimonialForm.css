@@ -1,0 +1,219 @@
+/* ============================================
+   TESTIMONIAL FORM - User Submission Form
+   ============================================ */
+
+.testimonial-form-container {
+  background: var(--bg-soft);
+  border-radius: var(--radius-xl);
+  padding: var(--space-4);
+  margin-top: var(--space-6);
+  border: 2px solid var(--border-light);
+}
+
+.testimonial-form-header {
+  text-align: center;
+  margin-bottom: var(--space-3);
+}
+
+.testimonial-form-header h3 {
+  margin: 0 0 var(--space-1) 0;
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+.testimonial-form-header p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+.testimonial-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.form-group {
+  margin-bottom: var(--space-3);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-weight: var(--font-semibold);
+  color: var(--text-primary);
+  font-size: var(--text-sm);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  background: var(--bg-primary);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-subtle);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Rating Input */
+.rating-input {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.star-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform var(--transition-fast);
+}
+
+.star-button:hover {
+  transform: scale(1.1);
+}
+
+.star-button svg {
+  stroke: #fbbf24;
+  transition: all var(--transition-fast);
+}
+
+.star-button.active svg {
+  fill: #fbbf24;
+}
+
+/* Photo Upload */
+.photo-upload-label {
+  display: block;
+  cursor: pointer;
+}
+
+.photo-upload-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 2px dashed var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.photo-upload-button:hover {
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.photo-preview {
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 2px solid var(--border-light);
+  margin: 0 auto;
+}
+
+.photo-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.remove-photo {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+  border: none;
+  border-radius: var(--radius-full);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.remove-photo:hover {
+  background: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Alert */
+.alert {
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-3);
+  font-size: var(--text-sm);
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Success State */
+.testimonial-form-success {
+  text-align: center;
+  padding: var(--space-6) var(--space-4);
+}
+
+.success-icon {
+  color: #10b981;
+  margin-bottom: var(--space-3);
+}
+
+.testimonial-form-success h3 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  color: var(--text-primary);
+}
+
+.testimonial-form-success p {
+  margin: 0 0 var(--space-3) 0;
+  color: var(--text-secondary);
+  font-size: var(--text-base);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .testimonial-form-container {
+    padding: var(--space-3);
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rating-input {
+    justify-content: center;
+  }
+}

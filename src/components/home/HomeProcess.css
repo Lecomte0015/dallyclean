@@ -1,0 +1,138 @@
+/* ============================================
+   HOME PROCESS - 4-Step Process
+   ============================================ */
+
+.home-process {
+  padding: var(--space-8) 0;
+}
+
+.process-header {
+  text-align: center;
+  margin-bottom: var(--space-7);
+}
+
+.process-header h2 {
+  margin-bottom: var(--space-2);
+}
+
+.process-header p {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.process-step {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
+  transition: all var(--transition-base);
+}
+
+.process-step:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+/* Step Number */
+.step-number {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-bold);
+  font-size: var(--text-2xl);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-base);
+}
+
+.process-step:hover .step-number {
+  transform: scale(1.1);
+}
+
+/* Step Content */
+.step-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.step-content h3 {
+  margin: 0;
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+}
+
+.step-content p {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+}
+
+/* Step Connector Arrow */
+.step-connector {
+  position: absolute;
+  top: 50%;
+  right: -32px;
+  transform: translateY(-50%);
+  font-size: var(--text-3xl);
+  color: var(--color-primary);
+  font-weight: var(--font-bold);
+  z-index: 1;
+  opacity: 0.3;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .step-connector {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-process {
+    padding: var(--space-7) 0;
+  }
+
+  .process-header {
+    margin-bottom: var(--space-5);
+  }
+
+  .process-step {
+    padding: var(--space-4);
+  }
+
+  .step-number {
+    width: 48px;
+    height: 48px;
+    font-size: var(--text-xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+}

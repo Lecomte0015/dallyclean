@@ -1,0 +1,251 @@
+/* ============================================
+   ABOUT PAGE - Company Information
+   ============================================ */
+
+.about-page {
+  min-height: 100vh;
+}
+
+/* Hero Section */
+.about-hero {
+  background: linear-gradient(135deg, var(--bg-soft) 0%, var(--bg-primary) 100%);
+}
+
+.about-hero-content {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.about-hero-content h1 {
+  margin-bottom: var(--space-3);
+}
+
+.about-subtitle {
+  font-size: var(--text-xl);
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: var(--leading-relaxed);
+}
+
+.about-content {
+  margin-top: var(--space-4);
+}
+
+/* Mission Section */
+.about-mission {
+  padding: var(--space-8) 0;
+}
+
+.mission-content {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-7);
+  border-radius: var(--radius-xl);
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.mission-content h2 {
+  text-align: center;
+  margin-bottom: var(--space-5);
+  color: var(--text-primary);
+}
+
+.mission-content p {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+.mission-content p:last-child {
+  margin-bottom: 0;
+}
+
+/* Commitments Section */
+.about-commitments {
+  padding: var(--space-8) 0;
+}
+
+.commitments-header {
+  text-align: center;
+  margin-bottom: var(--space-7);
+}
+
+.commitments-header h2 {
+  margin-bottom: var(--space-2);
+}
+
+.commitments-header p {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+.commitments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.commitment-card {
+  padding: var(--space-6);
+  border-radius: var(--radius-xl);
+  background: var(--bg-primary);
+  border: 2px solid var(--border-light);
+  text-align: center;
+  transition: all var(--transition-base);
+}
+
+.commitment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--color-primary);
+}
+
+.commitment-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto var(--space-4) auto;
+  background: var(--color-primary-subtle);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary);
+  transition: all var(--transition-base);
+}
+
+.commitment-card:hover .commitment-icon {
+  transform: scale(1.1);
+  background: var(--color-primary);
+  color: white;
+}
+
+.commitment-card h3 {
+  margin: 0 0 var(--space-2) 0;
+  font-size: var(--text-xl);
+  color: var(--text-primary);
+}
+
+.commitment-card p {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+}
+
+/* Contact Section */
+.about-contact {
+  padding: var(--space-8) 0;
+}
+
+.contact-card {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--space-7);
+  border-radius: var(--radius-xl);
+  text-align: center;
+  background: var(--color-primary-subtle);
+  border: 2px solid var(--color-primary);
+}
+
+.contact-card h2 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--color-primary-dark);
+}
+
+.contact-card > p {
+  margin: 0 0 var(--space-5) 0;
+  font-size: var(--text-lg);
+}
+
+.contact-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-fast);
+}
+
+.contact-item:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.contact-item svg {
+  color: var(--color-primary);
+}
+
+.contact-item h4 {
+  margin: 0;
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  font-weight: var(--font-medium);
+}
+
+.contact-item a {
+  font-size: var(--text-lg);
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.contact-item a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-hero-content h1 {
+    font-size: var(--text-3xl);
+  }
+
+  .about-subtitle {
+    font-size: var(--text-lg);
+  }
+
+  .mission-content {
+    padding: var(--space-5);
+  }
+
+  .mission-content p {
+    font-size: var(--text-base);
+  }
+
+  .commitments-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .commitment-card {
+    padding: var(--space-5);
+  }
+
+  .commitment-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .contact-card {
+    padding: var(--space-5);
+  }
+
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+}
