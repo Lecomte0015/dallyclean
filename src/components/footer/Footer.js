@@ -16,9 +16,8 @@ const Footer = () => {
     try {
       const { data, error } = await supabase
         .from('services')
-        .select('id, name, slug')
-        .eq('is_active', true)
-        .order('display_order', { ascending: true })
+        .select('name, slug')
+        .order('name', { ascending: true })
 
       if (error) {
         console.error('Error loading services:', error)
