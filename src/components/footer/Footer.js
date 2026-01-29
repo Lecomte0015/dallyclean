@@ -2,8 +2,35 @@ import "./Footer.css"
 import { Link } from "react-router-dom"
 import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin } from "lucide-react"
 import logo from "../../assets/images/logo.png"
+import { useState, useEffect } from "react"
+import { supabase } from "../../lib/supabaseClient"
 
 const Footer = () => {
+  const [services, setServices] = useState([])
+
+  useEffect(() => {
+    loadServices()
+  }, [])
+
+  const loadServices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('services')
+        .select('id, name, slug')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true })
+
+      if (error) {
+        console.error('Error loading services:', error)
+        return
+      }
+
+      setServices(data || [])
+    } catch (error) {
+      console.error('Error loading services:', error)
+    }
+  }
+
   return (
     <footer className="footer-container">
       <div className="container">
@@ -43,9 +70,15 @@ const Footer = () => {
           <div className="footer-column">
             <h4>Services</h4>
             <ul>
-              <li><Link to="/services/nettoyage-voiture">Nettoyage voiture</Link></li>
-              <li><Link to="/services/nettoyage-domicile">Nettoyage domicile</Link></li>
-              <li><Link to="/services/nettoyage-bureau">Nettoyage bureau</Link></li>
+              {services.length > 0 ? (
+                services.map((service) => (
+                  <li key={service.id}>
+                    <Link to={`/services/${service.slug}`}>{service.name}</Link>
+                  </li>
+                ))
+              ) : (
+                <li><Link to="/services">Voir tous nos services</Link></li>
+              )}
             </ul>
           </div>
 
