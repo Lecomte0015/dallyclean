@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from "react"
 import { Link } from "react-router-dom"
 import "./Banner.css"
 import "./Banner.override.css"
-import banner1 from "../../assets/images/banner1.png"
 import { ArrowRight } from "lucide-react"
 import { supabase } from "../../lib/supabaseClient"
 
@@ -175,8 +174,10 @@ const Banner = () => {
     return 'slideshow-ltr'
   }
 
+  const hasImage = Boolean(heroData.image_url)
+
   return (
-    <div className={`banner-container ${getLayoutClass()} ${hasSlideshow ? 'has-slideshow' : ''}`} style={containerStyle}>
+    <div className={`banner-container ${getLayoutClass()} ${hasSlideshow ? 'has-slideshow' : ''} ${!hasImage ? 'no-image' : ''}`} style={containerStyle}>
       {/* Background Slideshow */}
       {hasSlideshow && (
         <div className="banner-slideshow">
@@ -234,14 +235,16 @@ const Banner = () => {
         </div>
       </div>
 
-      <div className="banner-image">
-        <div className="banner-image-wrapper" style={getImageStyle()}>
-          <img
-            src={heroData.image_url || banner1}
-            alt="Service de nettoyage professionnel Dally"
-          />
+      {heroData.image_url && (
+        <div className="banner-image">
+          <div className="banner-image-wrapper" style={getImageStyle()}>
+            <img
+              src={heroData.image_url}
+              alt="Service de nettoyage professionnel Dally"
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
