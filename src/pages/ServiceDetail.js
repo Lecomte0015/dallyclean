@@ -212,7 +212,7 @@ const ServiceDetail = () => {
       case 'description':
         return service.description ? (
           <div className="service-detail-section" key="description">
-            <p className="service-description">{service.description}</p>
+            <div className="service-description" dangerouslySetInnerHTML={{ __html: service.description }} />
           </div>
         ) : null
 

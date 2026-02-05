@@ -3,7 +3,15 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../components/admin/AdminLayout'
 import { supabase } from '../../lib/supabaseClient'
 import { Plus, Edit, Trash2, Briefcase, Upload, X, Settings } from 'lucide-react'
+import RichTextEditor from '../../components/editor/RichTextEditor'
 import '../admin/BookingsPage.css'
+
+const stripHtml = (html) => {
+  if (!html) return ''
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
 
 const ServicesPage = () => {
   const [services, setServices] = useState([])
@@ -257,9 +265,13 @@ const ServicesPage = () => {
                       )}
                     </td>
                     <td><strong>{service.name}</strong></td>
-                    <td style={{maxWidth: '300px'}}>
+                    <td style={{maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'}}>
                       {service.description ? (
-                        <span style={{color: 'var(--text-secondary)'}}>{service.description}</span>
+                        <span style={{color: 'var(--text-secondary)'}}>
+                          {stripHtml(service.description).length > 100
+                            ? stripHtml(service.description).substring(0, 100) + '...'
+                            : stripHtml(service.description)}
+                        </span>
                       ) : (
                         <span style={{color: 'var(--text-muted)', fontStyle: 'italic'}}>Aucune description</span>
                       )}
@@ -341,14 +353,11 @@ const ServicesPage = () => {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                      id="description"
-                      value={currentService.description}
-                      onChange={(e) => setCurrentService({ ...currentService, description: e.target.value })}
+                    <label>Description</label>
+                    <RichTextEditor
+                      value={currentService.description || ''}
+                      onChange={(value) => setCurrentService(prev => ({ ...prev, description: value }))}
                       placeholder="Décrivez le service..."
-                      rows="4"
-                      style={{resize: 'vertical'}}
                     />
                   </div>
 

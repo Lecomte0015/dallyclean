@@ -3,7 +3,7 @@
    ============================================ */
 
 .home-plans {
-  padding: var(--space-8) 0;
+  padding: var(--space-5) 0;
   background: var(--bg-secondary);
 }
 
@@ -144,7 +144,7 @@
 .plans-cta {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-8);
+  margin-top: var(--space-4);
 }
 
 /* Responsive */

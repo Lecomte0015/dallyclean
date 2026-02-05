@@ -3,12 +3,12 @@
    ============================================ */
 
 .home-process {
-  padding: var(--space-8) 0;
+  padding: var(--space-5) 0;
 }
 
 .process-header {
   text-align: center;
-  margin-bottom: var(--space-7);
+  margin-bottom: var(--space-3);
 }
 
 .process-header h2 {

@@ -1,7 +1,7 @@
 /* TEST: Si vous voyez ce fond, le CSS est chargé */
 .service-detail-container {
   min-height: 80vh;
-  padding: var(--space-12) 0;
+  padding: var(--space-5) 0;
   background: var(--bg-primary);
 }
 
@@ -11,12 +11,12 @@
 }
 
 .service-detail-header {
-  margin-bottom: var(--space-8);
+  margin-bottom: var(--space-4);
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: var(--space-4);
+  gap: var(--space-2);
 }
 
 .service-detail-header h1 {
@@ -39,6 +39,7 @@
   color: var(--primary-dark);
 }
 
+/*
 .service-detail-grid {
   display: flex;
   flex-direction: column;
@@ -48,6 +49,7 @@
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg);
 }
+*/
 
 .service-detail-full {
   width: 100%;
@@ -56,14 +58,14 @@
 .service-detail-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
+  gap: var(--space-4);
 }
 
 .service-detail-left,
 .service-detail-right {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-3);
 }
 
 .service-detail-image {
@@ -85,7 +87,7 @@
 }
 
 .service-detail-section {
-  padding-bottom: var(--space-4);
+  padding-bottom: var(--space-2);
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -105,6 +107,68 @@
   color: var(--text-secondary);
   line-height: 1.7;
   margin: 0;
+}
+
+/* Rich text content styles */
+.service-description {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.service-description h1,
+.service-description h2,
+.service-description h3 {
+  color: var(--text-primary);
+  margin: 0 0 var(--space-3) 0;
+  line-height: 1.4;
+}
+
+.service-description h1 {
+  font-size: var(--text-2xl);
+}
+
+.service-description h2 {
+  font-size: var(--text-xl);
+}
+
+.service-description h3 {
+  font-size: var(--text-lg);
+}
+
+.service-description p {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.service-description p:last-child {
+  margin-bottom: 0;
+}
+
+.service-description ul,
+.service-description ol {
+  padding-left: var(--space-6);
+  margin: 0 0 var(--space-3) 0;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.service-description a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.service-description a:hover {
+  color: var(--primary-dark);
+}
+
+.service-description img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
 }
 
 .service-price {
@@ -341,7 +405,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .service-detail-container {
-    padding: var(--space-8) 0;
+    padding: var(--space-3) 0;
   }
 
   .service-detail-header {
@@ -354,8 +418,8 @@
   }
 
   .service-detail-grid {
-    gap: var(--space-6);
-    padding: var(--space-6);
+    gap: var(--space-3);
+    padding: var(--space-3);
   }
 
   .service-detail-columns {

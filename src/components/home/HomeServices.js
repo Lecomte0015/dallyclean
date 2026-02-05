@@ -12,6 +12,19 @@ const slugify = (text) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '')
 
+const stripHtml = (html) => {
+  if (!html) return ''
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
+
+const truncateText = (text, maxLength = 100) => {
+  const clean = stripHtml(text)
+  if (clean.length <= maxLength) return clean
+  return clean.substring(0, maxLength) + '...'
+}
+
 const HomeServices = () => {
   const [services, setServices] = useState([])
 
@@ -67,7 +80,7 @@ const HomeServices = () => {
               <div className="service-content">
                 <h3>{service.name}</h3>
                 <p className="text-muted">
-                  {service.description || 'Service de nettoyage professionnel et complet'}
+                  {truncateText(service.description, 100) || 'Service de nettoyage professionnel et complet'}
                 </p>
                 <Link
                   to={`/services/${slugify(service.name)}`}
