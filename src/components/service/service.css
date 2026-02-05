@@ -8,6 +8,7 @@
     cursor: pointer;
     transition: all 0.3s ease-out;
     width: 320px;
+    min-height: 380px;
 }
 .service-container:hover {
     background-color: #3591be;
@@ -21,10 +22,21 @@
 }
 
 
+.service-image {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
 .service-image>img {
     width: 100%;
-    height: 80px;
-    margin-bottom: 20px;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
 }
 
 
@@ -38,10 +50,12 @@
 .service-description {
     width: 100%;
     max-width: 320px;
+    min-height: 60px;
     font-size: 16px;
     color: #5C5C5C;
     text-align: center;
     transition: color 0.3s ease-out;
+    margin-bottom: 15px;
 }
 
 
@@ -74,9 +88,10 @@
   .service-container{
     padding: 20px;
     width: 45%;
+    min-height: 320px;
   }
-  .service-image>img{
-    height: 60px;
+  .service-image {
+    height: 120px;
   }
   .service-head>h3{
     font-size: 18px;
@@ -84,6 +99,7 @@
   .service-description{
     max-width: 90%;
     font-size: 15px;
+    min-height: 50px;
   }
   /* Disable aggressive hover on touch devices */
   .service-container:hover {
@@ -95,15 +111,17 @@
   .service-container{
     padding: 16px;
     width: 100%;
+    min-height: 300px;
   }
-  .service-image>img{
-    height: 50px;
+  .service-image {
+    height: 100px;
   }
   .service-head>h3{
     font-size: 16px;
   }
   .service-description{
     font-size: 14px;
+    min-height: 45px;
   }
   .button-info-wrapper>button{
     width: 100%;

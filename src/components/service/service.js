@@ -12,6 +12,19 @@ const slugify = (text) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 
+const stripHtml = (html) => {
+  if (!html) return ''
+  const tmp = document.createElement('div')
+  tmp.innerHTML = html
+  return tmp.textContent || tmp.innerText || ''
+}
+
+const truncateText = (text, maxLength = 100) => {
+  const clean = stripHtml(text)
+  if (clean.length <= maxLength) return clean
+  return clean.substring(0, maxLength) + '...'
+}
+
 const Service = () => {
   const [services, setServices] = useState([])
   const [loading, setLoading] = useState(true)
@@ -73,12 +86,13 @@ const Service = () => {
             ) : (
               <div style={{
                 width: '100%',
-                height: '200px',
+                height: '100%',
                 background: 'var(--bg-soft)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: 'var(--text-muted)'
+                color: 'var(--text-muted)',
+                borderRadius: '8px'
               }}>
                 Pas d'image
               </div>
@@ -90,7 +104,7 @@ const Service = () => {
           </div>
 
           <div className="service-description">
-            <p>{service.description}</p>
+            <p>{truncateText(service.description, 100)}</p>
           </div>
           <div className="button-info-wrapper">
                   <button className="button-info-service">Plus d'informations</button>
