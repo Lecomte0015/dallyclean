@@ -247,7 +247,7 @@ const HeroPage = () => {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)' }}>
+      <div className="admin-grid-2">
         {/* Colonne gauche - Textes */}
         <div className="admin-card" style={{ padding: 'var(--space-4)' }}>
           <h3 style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-4)' }}>
@@ -279,7 +279,7 @@ const HeroPage = () => {
             </small>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+          <div className="admin-grid-2">
             <div className="form-group">
               <label>Texte bouton principal</label>
               <input
@@ -300,7 +300,7 @@ const HeroPage = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)', marginTop: 'var(--space-3)' }}>
+          <div className="admin-grid-2" style={{ marginTop: 'var(--space-3)' }}>
             <div className="form-group">
               <label>Texte bouton secondaire</label>
               <input
@@ -407,7 +407,7 @@ const HeroPage = () => {
                   </label>
 
                   {(heroData.background_images || []).length > 0 && (
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <div className="admin-grid-3" style={{ marginBottom: 'var(--space-2)' }}>
                       {(heroData.background_images || []).map((img, index) => (
                         <div key={index} style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
                           <img
@@ -539,7 +539,7 @@ const HeroPage = () => {
             </div>
 
             {heroData.image_size === 'custom' && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-3)' }}>
+              <div className="admin-grid-2">
                 <div className="form-group">
                   <label>Largeur max</label>
                   <input
@@ -608,7 +608,7 @@ const HeroPage = () => {
           Couleurs
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)' }}>
+        <div className="admin-grid-4">
           {/* Fond */}
           <div className="form-group">
             <label>Fond de section</label>

@@ -142,10 +142,28 @@
 }
 
 /* Responsive */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .editor-menu {
     gap: 4px;
     padding: 6px 8px;
+  }
+
+  .menu-group {
+    gap: 2px;
+    padding-right: 6px;
+  }
+
+  .editor-menu button {
+    padding: 5px 8px;
+    font-size: 12px;
+    min-width: 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .editor-menu {
+    gap: 3px;
+    padding: 6px;
   }
 
   .menu-group {
@@ -166,5 +184,33 @@
 
   .editor-content .ProseMirror {
     font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-group {
+    border-right: none;
+    padding-right: 0;
+  }
+
+  .editor-menu button {
+    padding: 4px 5px;
+    font-size: 10px;
+    min-width: 26px;
+  }
+
+  .color-picker-label {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+
+  .color-picker-label input[type="color"] {
+    width: 20px;
+    height: 20px;
+  }
+
+  .editor-content {
+    min-height: 100px;
+    padding: 8px;
   }
 }

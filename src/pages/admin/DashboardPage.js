@@ -117,8 +117,10 @@ const DashboardPage = () => {
     <AdminLayout>
       <div className="dashboard-page">
         <div className="admin-page-header">
-          <h1>Tableau de bord</h1>
-          <p>Vue d'ensemble de votre activité</p>
+          <div>
+            <h1>Tableau de bord</h1>
+            <p>Vue d'ensemble de votre activité</p>
+          </div>
         </div>
 
         {/* Statistics Cards */}
