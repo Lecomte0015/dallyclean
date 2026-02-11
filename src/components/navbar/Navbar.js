@@ -29,6 +29,7 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
   const [navbarConfig, setNavbarConfig] = useState(DEFAULT_NAVBAR_CONFIG)
+  const [navbarColors, setNavbarColors] = useState({ background_color: '', text_color: '' })
 
   const handleHamburgerClick = () => {
     setMobileOpen(true)
@@ -104,6 +105,27 @@ const Navbar = () => {
     loadNavbarConfig()
   }, [])
 
+  // Charger les couleurs de la navbar
+  useEffect(() => {
+    const loadNavbarColors = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'navbar_colors')
+          .single()
+
+        if (error && error.code !== 'PGRST116') throw error
+        if (data && data.value) {
+          setNavbarColors(data.value)
+        }
+      } catch (error) {
+        console.error('Error loading navbar colors:', error)
+      }
+    }
+    loadNavbarColors()
+  }, [])
+
   // Charger les pages à afficher dans la navbar
   useEffect(() => {
     const loadNavPages = async () => {
@@ -140,9 +162,17 @@ const Navbar = () => {
     }, 150)
   }
 
+  // Build header style from navbar colors
+  const headerStyle = {}
+  if (navbarColors.background_color) headerStyle.backgroundColor = navbarColors.background_color
+  if (navbarColors.text_color) {
+    headerStyle['--text-secondary'] = navbarColors.text_color
+    headerStyle['--text-primary'] = navbarColors.text_color
+  }
+
   return (
     <>
-      <header className='navbar-container' ref={wrapperRef}>
+      <header className='navbar-container' ref={wrapperRef} style={headerStyle}>
         <div className='nav-left'>
           <Link to="/" className="logo-link"><img src={logo} alt='Dally Nettoyage' /></Link>
         </div>
@@ -224,14 +254,15 @@ const Navbar = () => {
               position: 'absolute',
               top: '0px',
               left: '0px',
-              backgroundColor: '#ffffff',
+              backgroundColor: navbarColors.background_color || '#ffffff',
               width: '85%',
               maxWidth: '380px',
               height: '100vh',
               padding: '48px',
               overflowY: 'auto',
               boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
-              margin: 0
+              margin: 0,
+              ...(navbarColors.text_color ? { color: navbarColors.text_color } : {})
             }}
           >
             <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>

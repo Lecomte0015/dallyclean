@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AdminLayout from '../../components/admin/AdminLayout'
 import { supabase } from '../../lib/supabaseClient'
-import { ArrowUp, ArrowDown, Eye, EyeOff, Save } from 'lucide-react'
+import { ArrowUp, ArrowDown, Eye, EyeOff, Save, Palette } from 'lucide-react'
 import '../admin/BookingsPage.css'
 import './ServiceLayoutPage.css'
 
@@ -24,13 +24,38 @@ const DEFAULT_NAVBAR = [
   { key: 'temoignages', label: 'Témoignages', visible: true }
 ]
 
+const colorPickerStyle = { width: '50px', height: '40px', padding: '2px', cursor: 'pointer', border: '2px solid var(--border-default)', borderRadius: '8px' }
+const colorTextStyle = { flex: 1, padding: '8px', borderRadius: '8px', border: '2px solid var(--border-default)', fontSize: '13px' }
+
+const ColorPicker = ({ label, value, onChange }) => (
+  <div className="form-group" style={{ marginBottom: 'var(--space-3)' }}>
+    <label style={{ fontSize: 'var(--text-sm)', marginBottom: '4px', display: 'block' }}>{label}</label>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+      <input type="color" value={value || '#ffffff'} onChange={(e) => onChange(e.target.value)} style={colorPickerStyle} />
+      <input type="text" value={value || ''} onChange={(e) => onChange(e.target.value)} placeholder="Par défaut" style={colorTextStyle} />
+      {value && (
+        <button
+          type="button"
+          onClick={() => onChange('')}
+          style={{ padding: '8px 12px', border: '1px solid var(--border-default)', borderRadius: '8px', background: 'var(--bg-soft)', cursor: 'pointer', fontSize: '12px', color: 'var(--text-muted)' }}
+          title="Réinitialiser"
+        >
+          ✕
+        </button>
+      )}
+    </div>
+  </div>
+)
+
 const HomepagePage = () => {
   const [sections, setSections] = useState(DEFAULT_SECTIONS)
   const [navbarLinks, setNavbarLinks] = useState(DEFAULT_NAVBAR)
+  const [navbarColors, setNavbarColors] = useState({ background_color: '', text_color: '' })
   const [loading, setLoading] = useState(true)
   const [savingSections, setSavingSections] = useState(false)
   const [savingNavbar, setSavingNavbar] = useState(false)
   const [message, setMessage] = useState(null)
+  const [expandedColorSection, setExpandedColorSection] = useState(null)
 
   useEffect(() => {
     loadConfig()
@@ -41,19 +66,23 @@ const HomepagePage = () => {
       const { data, error } = await supabase
         .from('site_settings')
         .select('*')
-        .in('key', ['homepage_sections', 'navbar_config'])
+        .in('key', ['homepage_sections', 'navbar_config', 'navbar_colors'])
 
       if (error) throw error
 
       if (data) {
         const sectionsData = data.find(d => d.key === 'homepage_sections')
         const navbarData = data.find(d => d.key === 'navbar_config')
+        const navColorsData = data.find(d => d.key === 'navbar_colors')
 
         if (sectionsData && sectionsData.value) {
           setSections(sectionsData.value)
         }
         if (navbarData && navbarData.value) {
           setNavbarLinks(navbarData.value)
+        }
+        if (navColorsData && navColorsData.value) {
+          setNavbarColors(navColorsData.value)
         }
       }
     } catch (error) {
@@ -95,6 +124,12 @@ const HomepagePage = () => {
     setSections(newSections)
   }
 
+  const updateSectionColor = (index, field, value) => {
+    const newSections = [...sections]
+    newSections[index] = { ...newSections[index], [field]: value }
+    setSections(newSections)
+  }
+
   const handleSaveSections = async () => {
     setSavingSections(true)
     try {
@@ -128,17 +163,28 @@ const HomepagePage = () => {
   const handleSaveNavbar = async () => {
     setSavingNavbar(true)
     try {
-      const { error } = await supabase
+      // Save links config
+      const { error: linksError } = await supabase
         .from('site_settings')
         .upsert({
           key: 'navbar_config',
           value: navbarLinks,
           updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'key'
-        })
+        }, { onConflict: 'key' })
 
-      if (error) throw error
+      if (linksError) throw linksError
+
+      // Save navbar colors
+      const { error: colorsError } = await supabase
+        .from('site_settings')
+        .upsert({
+          key: 'navbar_colors',
+          value: navbarColors,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'key' })
+
+      if (colorsError) throw colorsError
+
       showMessage('Configuration de la navbar sauvegardée!', 'success')
     } catch (error) {
       console.error('Error saving navbar config:', error)
@@ -191,62 +237,135 @@ const HomepagePage = () => {
 
           <div className="sections-list">
             {sections.map((section, index) => (
-              <div key={section.key} className="section-item">
-                <div className="section-controls">
-                  <button
-                    onClick={() => moveSectionUp(index)}
-                    disabled={index === 0}
-                    className="btn-icon"
-                    title="Monter"
-                  >
-                    <ArrowUp size={18} />
-                  </button>
-                  <button
-                    onClick={() => moveSectionDown(index)}
-                    disabled={index === sections.length - 1}
-                    className="btn-icon"
-                    title="Descendre"
-                  >
-                    <ArrowDown size={18} />
-                  </button>
-                </div>
+              <div key={section.key}>
+                <div className="section-item">
+                  <div className="section-controls">
+                    <button
+                      onClick={() => moveSectionUp(index)}
+                      disabled={index === 0}
+                      className="btn-icon"
+                      title="Monter"
+                    >
+                      <ArrowUp size={18} />
+                    </button>
+                    <button
+                      onClick={() => moveSectionDown(index)}
+                      disabled={index === sections.length - 1}
+                      className="btn-icon"
+                      title="Descendre"
+                    >
+                      <ArrowDown size={18} />
+                    </button>
+                  </div>
 
-                <div className="section-info">
-                  <span className="section-order">{index + 1}</span>
-                  <span className="section-label">{section.label}</span>
-                </div>
+                  <div className="section-info">
+                    <span className="section-order">{index + 1}</span>
+                    <span className="section-label">{section.label}</span>
+                  </div>
 
-                <button
-                  onClick={() => toggleSectionVisibility(index)}
-                  className={`btn-visibility ${section.visible ? 'visible' : 'hidden'}`}
-                >
-                  {section.visible ? (
-                    <>
-                      <Eye size={18} />
-                      <span>Visible</span>
-                    </>
-                  ) : (
-                    <>
-                      <EyeOff size={18} />
-                      <span>Masqué</span>
-                    </>
+                  {section.key !== 'banner' && (
+                    <button
+                      onClick={() => setExpandedColorSection(expandedColorSection === section.key ? null : section.key)}
+                      className="btn-icon"
+                      title="Couleurs"
+                      style={{
+                        color: expandedColorSection === section.key ? 'var(--color-primary)' : undefined,
+                        borderColor: expandedColorSection === section.key ? 'var(--color-primary)' : undefined
+                      }}
+                    >
+                      <Palette size={18} />
+                    </button>
                   )}
-                </button>
+
+                  <button
+                    onClick={() => toggleSectionVisibility(index)}
+                    className={`btn-visibility ${section.visible ? 'visible' : 'hidden'}`}
+                  >
+                    {section.visible ? (
+                      <>
+                        <Eye size={18} />
+                        <span>Visible</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff size={18} />
+                        <span>Masqué</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Color pickers panel */}
+                {expandedColorSection === section.key && section.key !== 'banner' && (
+                  <div style={{
+                    padding: 'var(--space-4)',
+                    background: 'var(--bg-soft)',
+                    borderRadius: '0 0 var(--radius-md) var(--radius-md)',
+                    marginTop: '-2px',
+                    border: '2px solid var(--color-primary)',
+                    borderTop: '1px dashed var(--border-default)'
+                  }}>
+                    <div className="admin-grid-3">
+                      <ColorPicker
+                        label="Couleur de fond"
+                        value={section.background_color || ''}
+                        onChange={(val) => updateSectionColor(index, 'background_color', val)}
+                      />
+                      <ColorPicker
+                        label="Couleur du texte"
+                        value={section.text_color || ''}
+                        onChange={(val) => updateSectionColor(index, 'text_color', val)}
+                      />
+                      <ColorPicker
+                        label="Couleur des boutons"
+                        value={section.button_color || ''}
+                        onChange={(val) => updateSectionColor(index, 'button_color', val)}
+                      />
+                    </div>
+                    {(section.background_color || section.text_color || section.button_color) && (
+                      <div style={{
+                        marginTop: 'var(--space-3)',
+                        padding: 'var(--space-3)',
+                        borderRadius: 'var(--radius-md)',
+                        backgroundColor: section.background_color || 'var(--bg-primary)',
+                        color: section.text_color || 'var(--text-primary)',
+                        border: '1px solid var(--border-default)'
+                      }}>
+                        <span style={{ fontSize: 'var(--text-sm)', fontWeight: 'var(--font-medium)' }}>
+                          Aperçu : Texte d'exemple
+                        </span>
+                        {section.button_color && (
+                          <span style={{
+                            marginLeft: 'var(--space-3)',
+                            padding: '4px 12px',
+                            borderRadius: 'var(--radius-md)',
+                            backgroundColor: section.button_color,
+                            color: '#ffffff',
+                            fontSize: 'var(--text-sm)',
+                            fontWeight: 'var(--font-semibold)'
+                          }}>
+                            Bouton
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
 
           <div className="editor-footer">
             <p className="help-text">
-              Utilisez les flèches pour réordonner les sections. Cliquez sur l'oeil pour masquer/afficher une section sur la page d'accueil.
+              Utilisez les flèches pour réordonner les sections. Cliquez sur l'oeil pour masquer/afficher. Cliquez sur la palette pour personnaliser les couleurs. La section Hero est gérée depuis sa propre page.
             </p>
           </div>
         </div>
 
-        {/* Card 2: Liens de la navbar */}
+        {/* Card 2: Liens et couleurs de la navbar */}
         <div className="section-editor">
           <div className="editor-header">
-            <h2>Liens de la barre de navigation</h2>
+            <h2>Barre de navigation</h2>
             <button
               onClick={handleSaveNavbar}
               disabled={savingNavbar}
@@ -257,7 +376,10 @@ const HomepagePage = () => {
             </button>
           </div>
 
-          <div className="sections-list">
+          <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-3)', color: 'var(--text-primary)' }}>
+            Liens de navigation
+          </h3>
+          <div className="sections-list" style={{ marginBottom: 'var(--space-5)' }}>
             {navbarLinks.map((link, index) => (
               <div key={link.key} className="section-item">
                 <div className="section-info">
@@ -284,9 +406,47 @@ const HomepagePage = () => {
             ))}
           </div>
 
+          <h3 style={{ fontSize: 'var(--text-lg)', marginBottom: 'var(--space-3)', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <Palette size={18} />
+            Couleurs de la navbar
+          </h3>
+          <div className="admin-grid-2" style={{ marginBottom: 'var(--space-4)' }}>
+            <ColorPicker
+              label="Couleur de fond"
+              value={navbarColors.background_color || ''}
+              onChange={(val) => setNavbarColors(prev => ({ ...prev, background_color: val }))}
+            />
+            <ColorPicker
+              label="Couleur du texte"
+              value={navbarColors.text_color || ''}
+              onChange={(val) => setNavbarColors(prev => ({ ...prev, text_color: val }))}
+            />
+          </div>
+
+          {(navbarColors.background_color || navbarColors.text_color) && (
+            <div style={{
+              padding: 'var(--space-3)',
+              borderRadius: 'var(--radius-md)',
+              backgroundColor: navbarColors.background_color || '#ffffff',
+              color: navbarColors.text_color || 'var(--text-secondary)',
+              border: '1px solid var(--border-default)',
+              marginBottom: 'var(--space-4)',
+              display: 'flex',
+              gap: 'var(--space-4)',
+              alignItems: 'center',
+              fontSize: 'var(--text-sm)',
+              fontWeight: 'var(--font-medium)'
+            }}>
+              <span>Aperçu :</span>
+              <span>Accueil</span>
+              <span>Services</span>
+              <span>Tarifs</span>
+            </div>
+          )}
+
           <div className="editor-footer">
             <p className="help-text">
-              Masquez ou affichez les liens dans la barre de navigation. Les pages dynamiques ajoutées depuis la section "Pages" sont gérées séparément.
+              Masquez ou affichez les liens dans la barre de navigation. Personnalisez les couleurs du fond et du texte. Les pages dynamiques ajoutées depuis "Pages" sont gérées séparément.
             </p>
           </div>
         </div>

@@ -71,6 +71,23 @@ const HomePage = () => {
       {visibleSections.map(section => {
         const Component = SECTION_COMPONENTS[section.key]
         if (!Component) return null
+
+        // Build wrapper style from section colors (skip banner - managed by HeroPage)
+        const wrapperStyle = {}
+        if (section.key !== 'banner') {
+          if (section.background_color) wrapperStyle.backgroundColor = section.background_color
+          if (section.text_color) wrapperStyle.color = section.text_color
+          if (section.button_color) wrapperStyle['--color-primary'] = section.button_color
+        }
+
+        const hasCustomColors = Object.keys(wrapperStyle).length > 0
+        if (hasCustomColors) {
+          return (
+            <div key={section.key} style={wrapperStyle}>
+              <Component />
+            </div>
+          )
+        }
         return <Component key={section.key} />
       })}
     </>
