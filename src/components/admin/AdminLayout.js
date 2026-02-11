@@ -14,7 +14,8 @@ import {
   Menu,
   X,
   Settings,
-  Home
+  Home,
+  Layout
 } from 'lucide-react'
 import { supabase } from '../../lib/supabaseClient'
 import './AdminLayout.css'
@@ -23,6 +24,7 @@ import logo from '../../assets/images/logo.png'
 const menuItems = [
   { path: '/admin/dashboard', icon: LayoutDashboard, label: 'Tableau de bord' },
   { path: '/admin/bookings', icon: Calendar, label: 'Réservations' },
+  { path: '/admin/homepage', icon: Layout, label: "Page d'Accueil" },
   { path: '/admin/hero', icon: Home, label: 'Section Hero' },
   { path: '/admin/services', icon: Briefcase, label: 'Services' },
   { path: '/admin/service-layout', icon: Settings, label: 'Configuration Pages' },

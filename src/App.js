@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 // Front-Office Components
 import Navbar from './components/navbar/Navbar';
 import Footer from './components/footer/Footer';
-import Banner from './components/banner/Banner';
+import HomePage from './pages/HomePage'
 import ServicesPage from './pages/ServicesPage'
 import ServiceDetail from './pages/ServiceDetail'
 import BookingPage from './pages/BookingPage'
@@ -12,12 +12,6 @@ import Testimonials from './components/testimonials/Testimonials'
 import TarifsPage from './pages/TarifsPage'
 import AboutPage from './pages/AboutPage'
 import PageView from './pages/PageView'
-import HomeServices from './components/home/HomeServices'
-import HomePlans from './components/home/HomePlans'
-import HomeProcess from './components/home/HomeProcess'
-import HomeAreas from './components/home/HomeAreas'
-import HomeFAQ from './components/home/HomeFAQ'
-import HomeCTA from './components/home/HomeCTA'
 
 // Admin Components
 import ProtectedRoute from './components/admin/ProtectedRoute'
@@ -35,6 +29,7 @@ import MediaPage from './pages/admin/MediaPage'
 import DebugOptions from './pages/admin/DebugOptions'
 import ServiceLayoutPage from './pages/admin/ServiceLayoutPage'
 import HeroPage from './pages/admin/HeroPage'
+import HomepagePage from './pages/admin/HomepagePage'
 
 const App = () => {
   return (
@@ -102,6 +97,11 @@ const App = () => {
             <MediaPage />
           </ProtectedRoute>
         } />
+        <Route path="/admin/homepage" element={
+          <ProtectedRoute>
+            <HomepagePage />
+          </ProtectedRoute>
+        } />
         <Route path="/admin/debug-options" element={
           <ProtectedRoute>
             <DebugOptions />
@@ -113,18 +113,7 @@ const App = () => {
           <>
             <Navbar />
             <Routes>
-              <Route path="/" element={
-                <>
-                  <Banner />
-                  <HomeServices />
-                  <HomeProcess />
-                  <Testimonials />
-                  <HomePlans />
-                  <HomeAreas />
-                  <HomeFAQ />
-                  <HomeCTA />
-                </>
-              } />
+              <Route path="/" element={<HomePage />} />
               <Route path="/services" element={<ServicesPage/>} />
               <Route path="/services/:slug" element={<ServiceDetail/>} />
               <Route path="/booking" element={<BookingPage/>} />

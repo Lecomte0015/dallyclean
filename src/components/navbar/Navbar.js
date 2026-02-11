@@ -16,21 +16,32 @@ const slugify = (text) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 
+const DEFAULT_NAVBAR_CONFIG = [
+  { key: 'accueil', label: 'Accueil', visible: true },
+  { key: 'services', label: 'Services', visible: true },
+  { key: 'tarifs', label: 'Tarifs', visible: true },
+  { key: 'a-propos', label: 'À propos', visible: true },
+  { key: 'temoignages', label: 'Témoignages', visible: true }
+]
+
 const Navbar = () => {
   const [open, setOpen] = useState(false) // dropdown desktop
   const [mobileOpen, setMobileOpen] = useState(false)
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false)
+  const [navbarConfig, setNavbarConfig] = useState(DEFAULT_NAVBAR_CONFIG)
 
-  // Debug: log when hamburger is clicked
   const handleHamburgerClick = () => {
-    console.log('Hamburger clicked! Current mobileOpen:', mobileOpen)
     setMobileOpen(true)
-    console.log('Setting mobileOpen to true')
   }
   const [services, setServices] = useState([])
   const [navPages, setNavPages] = useState([])
   const wrapperRef = useRef(null)
   const closeTimeout = useRef(null)
+
+  const isLinkVisible = (key) => {
+    const link = navbarConfig.find(l => l.key === key)
+    return link ? link.visible : true
+  }
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -70,6 +81,27 @@ const Navbar = () => {
       }
     }
     loadServices()
+  }, [])
+
+  // Charger la config de la navbar
+  useEffect(() => {
+    const loadNavbarConfig = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('value')
+          .eq('key', 'navbar_config')
+          .single()
+
+        if (error && error.code !== 'PGRST116') throw error
+        if (data && data.value) {
+          setNavbarConfig(data.value)
+        }
+      } catch (error) {
+        console.error('Error loading navbar config:', error)
+      }
+    }
+    loadNavbarConfig()
   }, [])
 
   // Charger les pages à afficher dans la navbar
@@ -117,33 +149,35 @@ const Navbar = () => {
 
         <nav className='nav-center' aria-label="Navigation principale">
           <ul className='nav-list'>
-            <li><NavLink to="/" end>Accueil</NavLink></li>
+            {isLinkVisible('accueil') && <li><NavLink to="/" end>Accueil</NavLink></li>}
 
-            <li className='nav-item-dropdown' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-              <button
-                className='dropdown-toggle'
-                onClick={() => setOpen(o => !o)}
-                aria-expanded={open}
-                aria-haspopup="menu"
-              >Services ▾</button>
+            {isLinkVisible('services') && (
+              <li className='nav-item-dropdown' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <button
+                  className='dropdown-toggle'
+                  onClick={() => setOpen(o => !o)}
+                  aria-expanded={open}
+                  aria-haspopup="menu"
+                >Services ▾</button>
 
-              <ul className={`dropdown-menu ${open ? 'open' : ''}`} role="menu">
-                {services.map(s => (
-                  <li key={s.name}>
-                    <Link
-                      to={`/services/${s.slug || slugify(s.name)}`}
-                      onClick={() => setOpen(false)}
-                    >
-                      {s.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </li>
+                <ul className={`dropdown-menu ${open ? 'open' : ''}`} role="menu">
+                  {services.map(s => (
+                    <li key={s.name}>
+                      <Link
+                        to={`/services/${s.slug || slugify(s.name)}`}
+                        onClick={() => setOpen(false)}
+                      >
+                        {s.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            )}
 
-            <li><NavLink to="/tarifs">Tarifs</NavLink></li>
-            <li><NavLink to="/a-propos">À propos</NavLink></li>
-            <li><NavLink to="/testimonials">Témoignages</NavLink></li>
+            {isLinkVisible('tarifs') && <li><NavLink to="/tarifs">Tarifs</NavLink></li>}
+            {isLinkVisible('a-propos') && <li><NavLink to="/a-propos">À propos</NavLink></li>}
+            {isLinkVisible('temoignages') && <li><NavLink to="/testimonials">Témoignages</NavLink></li>}
             {navPages.map(page => (
               <li key={page.slug}>
                 <NavLink to={`/pages/${page.slug}`}>{page.title}</NavLink>
@@ -202,18 +236,20 @@ const Navbar = () => {
           >
             <button className='mobile-close' aria-label='Fermer le menu' onClick={() => setMobileOpen(false)}>✕</button>
             <ul>
-              <li><Link to="/" onClick={() => setMobileOpen(false)}>Accueil</Link></li>
-              <li>
-                <button className='mobile-accordion' onClick={() => setMobileServicesOpen(s => !s)} aria-expanded={mobileServicesOpen}>Nos services ▾</button>
-                <ul className={`mobile-submenu ${mobileServicesOpen ? 'open' : ''}`}>
-                  {services.map(s => (
-                    <li key={s.name}><Link to={`/services/${s.slug || slugify(s.name)}`} onClick={() => setMobileOpen(false)}>{s.name}</Link></li>
-                  ))}
-                </ul>
-              </li>
-              <li><Link to="/tarifs" onClick={() => setMobileOpen(false)}>Tarifs</Link></li>
-              <li><Link to="/a-propos" onClick={() => setMobileOpen(false)}>À propos</Link></li>
-              <li><Link to="/testimonials" onClick={() => setMobileOpen(false)}>Témoignages</Link></li>
+              {isLinkVisible('accueil') && <li><Link to="/" onClick={() => setMobileOpen(false)}>Accueil</Link></li>}
+              {isLinkVisible('services') && (
+                <li>
+                  <button className='mobile-accordion' onClick={() => setMobileServicesOpen(s => !s)} aria-expanded={mobileServicesOpen}>Nos services ▾</button>
+                  <ul className={`mobile-submenu ${mobileServicesOpen ? 'open' : ''}`}>
+                    {services.map(s => (
+                      <li key={s.name}><Link to={`/services/${s.slug || slugify(s.name)}`} onClick={() => setMobileOpen(false)}>{s.name}</Link></li>
+                    ))}
+                  </ul>
+                </li>
+              )}
+              {isLinkVisible('tarifs') && <li><Link to="/tarifs" onClick={() => setMobileOpen(false)}>Tarifs</Link></li>}
+              {isLinkVisible('a-propos') && <li><Link to="/a-propos" onClick={() => setMobileOpen(false)}>À propos</Link></li>}
+              {isLinkVisible('temoignages') && <li><Link to="/testimonials" onClick={() => setMobileOpen(false)}>Témoignages</Link></li>}
               {navPages.map(page => (
                 <li key={page.slug}>
                   <Link to={`/pages/${page.slug}`} onClick={() => setMobileOpen(false)}>
